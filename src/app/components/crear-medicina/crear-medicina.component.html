@@ -1,0 +1,46 @@
+<h1 class="text-center mb-3">Nuevo medicamento</h1>
+<div class="container">
+    <div class="formulario">
+    <form (ngSubmit)="createMedicine()">
+        <div class="mb-3">
+          <label for="name" class="form-label">Nombre del medicamento: </label>
+          <div class="input">
+            <input type="text" name="name" pInputText [(ngModel)]="medicine.name" />
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="fabrication-date" class="form-label">Fecha de fabricación: </label>
+          <div class="input">
+            <p-calendar name="fabrication-date"  [showIcon]="true" [(ngModel)]="medicine.fabricationDate"></p-calendar>
+          </div>
+        </div>
+        <div class="mb-3">
+            <label for="expiration-date" class="form-label">Fecha de expiración: </label>
+            <div class="input">
+                <p-calendar name="expiration-date" [(ngModel)]="medicine.dueDate" [showIcon]="true"></p-calendar>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="stock" class="form-label">Cantidad del producto: </label>
+            <div class="input">
+                <p-inputNumber   name="stock" inputId="integeronly" [(ngModel)]="medicine.stock"> </p-inputNumber>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="unit-value" class="form-label">Valor unitario: </label>
+            <div class="input">
+                <p-inputNumber  name="unit-value" inputId="integeronly" [(ngModel)]="medicine.unitValue"> </p-inputNumber>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="laboratory" class="form-label">Laboratorio de fabrica: </label>
+            <div class="input">
+                <p-dropdown [options]="laboratories" name="laboratory" [(ngModel)]="selectedLaboratory" optionLabel="laboratoryName"></p-dropdown>
+            </div>
+        </div>
+        <div class="mb-3 formulario">
+            <button type="submit" class="btn btn-success">Registrar</button>
+        </div>
+    </form>
+    </div>
+</div>

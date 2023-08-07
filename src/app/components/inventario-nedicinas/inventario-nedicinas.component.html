@@ -1,0 +1,28 @@
+<h1 class="text-center mb-5">Medicinas registradas</h1>
+<div class="container">
+<div class="card">
+    <p-table [columns]="cols" [paginator]="true" 
+    [rows]="2"  [value]="medicines" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns">
+                    {{ col.header }}
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+                <td *ngFor="let col of columns">
+                    <p *ngIf="col.field=='dueDate'|| col.field=='fabricationDate'">{{ rowData[col.field]| date:'yyyy-MM-dd' }}</p>
+                    <p *ngIf="col.field!='dueDate' && col.field!='fabricationDate'">{{ rowData[col.field]}}</p>
+                    <p-button *ngIf="col.field=='eliminar'" label="Eliminar" icon="pi pi-trash" (click)="deleteMedicine(rowData['id'])" styleClass="p-button-danger"></p-button>
+                    <p-button *ngIf="col.field=='editar'"label="Editar" icon="pi pi-pencil" (click)="updateMedicine(rowData['id'])" styleClass="p-button-info"></p-button>
+                    <p-button *ngIf="col.field=='vender'"label="Vender" icon="pi pi-dollar" styleClass="p-button-warning"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+<button pButton pRipple label="Crear nuevo" icon="pi pi-plus" class="p-button-success mt-3" (click)="createMedicine()"></button>
+
+</div>
