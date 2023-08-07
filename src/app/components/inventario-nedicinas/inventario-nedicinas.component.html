@@ -17,12 +17,34 @@
                     <p *ngIf="col.field!='dueDate' && col.field!='fabricationDate'">{{ rowData[col.field]}}</p>
                     <p-button *ngIf="col.field=='eliminar'" label="Eliminar" icon="pi pi-trash" (click)="deleteMedicine(rowData['id'])" styleClass="p-button-danger"></p-button>
                     <p-button *ngIf="col.field=='editar'"label="Editar" icon="pi pi-pencil" (click)="updateMedicine(rowData['id'])" styleClass="p-button-info"></p-button>
-                    <p-button *ngIf="col.field=='vender'"label="Vender" icon="pi pi-dollar" styleClass="p-button-warning"></p-button>
+                    <p-button *ngIf="col.field=='vender'"label="Vender" icon="pi pi-dollar" (click)="saleSelectedMedicine(rowData['id'])"styleClass="p-button-warning"></p-button>
                 </td>
             </tr>
         </ng-template>
     </p-table>
 </div>
 <button pButton pRipple label="Crear nuevo" icon="pi pi-plus" class="p-button-success mt-3" (click)="createMedicine()"></button>
-
+<p-dialog header="Realizar venta {{medicineForSale.name}}" [(visible)]="visible" [style]="{width: '50vw'}">
+    <form (ngSubmit)="makeSale()">
+        <div class="mb-3">
+            <label for="stock" class="form-label">Cantidad venta: </label>
+            <div class="input">
+                <p-inputNumber [(ngModel)]="sale.stockSale" (ngModelChange)="updateTotalValue()" name="stock-sale" mode="decimal" [showButtons]="true" inputId="minmax-buttons" [min]="0" [max]="medicineForSale.stock"> </p-inputNumber>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="stock" class="form-label">Valor unitario:</label>
+            <div class="input">
+                <p-inputNumber [(ngModel)]="medicineForSale.unitValue" name="unit-value" mode="currency" inputId="currency-colombia" currency="COP" locale="en-US" [disabled]="true"> </p-inputNumber>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="stock" class="form-label">Valor Total:</label>
+            <div class="input">
+                <p-inputNumber [(ngModel)]="sale.totalValue" name="total-value" mode="currency" inputId="currency-colombia" currency="COP" locale="en-US" [disabled]="true"> </p-inputNumber>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success">Vender</button>
+      </form>
+</p-dialog>
 </div>

@@ -32,5 +32,12 @@ export class MedicineService{
         return this.httpClient.put(`${this.base_url}/${id}`, medicine);
     }
 
+    public updateStockMedicine(id:number, stockSale: number):Observable<any>{
+        const amountStockLess = new FormData();
+        // @ts-ignore
+        amountStockLess.append("stock", stockSale);
+        return this.httpClient.put(`${this.base_url}/stock/${id}`, amountStockLess);
+    }
+
 
 }

@@ -1,0 +1,22 @@
+<h1>Ventas realizadas</h1>
+<div class="container">
+<div class="card">
+    <p-table [columns]="cols" [paginator]="true" 
+    [rows]="5" [value]="sales" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns">
+                    {{ col.header }}
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+                <td *ngFor="let col of columns">
+                    {{ rowData[col.field] }}
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+</div>

@@ -37,6 +37,7 @@ export class InventarioLaboratoriosComponent {
  showDialog() {
     this.visible = true;
   }
+
  
  getAllLaboratories(){
    this.laboratoryService.getAllLaboratories().subscribe(data =>{

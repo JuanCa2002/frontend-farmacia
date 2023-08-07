@@ -18,6 +18,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CrearMedicinaComponent } from './components/crear-medicina/crear-medicina.component';
 import { ActualizarMedicamentoComponent } from './components/actualizar-medicamento/actualizar-medicamento.component';
 import { InventarioLaboratoriosComponent } from './components/inventario-laboratorios/inventario-laboratorios.component';
+import { InventarioSalesComponent } from './components/inventario-sales/inventario-sales.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { InventarioLaboratoriosComponent } from './components/inventario-laborat
     NavbarComponent,
     CrearMedicinaComponent,
     ActualizarMedicamentoComponent,
-    InventarioLaboratoriosComponent
+    InventarioLaboratoriosComponent,
+    InventarioSalesComponent
   ],
   imports: [
     BrowserModule,

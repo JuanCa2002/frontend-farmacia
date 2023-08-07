@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Laboratory } from 'src/app/models/Laboratory';
 import { Column } from 'src/app/models/column';
 
 import { Medicine } from 'src/app/models/medicine';
+import { Sale } from 'src/app/models/sale';
 import { LaboratoryService } from 'src/app/services/laboratory.service';
 import { MedicineService } from 'src/app/services/medice.service';
+import { SaleService } from 'src/app/services/sale.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -17,11 +19,17 @@ import Swal from 'sweetalert2';
 export class InventarioNedicinasComponent {
   //Table varibles
   medicines: Medicine[];
+  currentDate: Date = new Date();
+  medicineForSale: Medicine = new Medicine();
+  sale: Sale = new Sale();
+  visible:boolean = false;
   laboratory: Laboratory = new Laboratory();
   laboratories: Laboratory[] = [];
   cols!: Column[];
+  
 
-  constructor(private medicineService: MedicineService, private router:Router, private laboratoryService: LaboratoryService){}
+  constructor(private medicineService: MedicineService, private router:Router,
+     private laboratoryService: LaboratoryService, private saleService:SaleService){}
 
   ngOnInit() {
      this.getAllMedicines();
@@ -37,8 +45,55 @@ export class InventarioNedicinasComponent {
         { field: 'editar',header:'Acciones'},
         { field: 'vender',header:''},
     ];
- } 
+ }
+ 
+ makeSale(){
+  if(this.sale.stockSale>0){
+    this.sale.unitValue = this.medicineForSale.unitValue;
+    this.sale.medicineId = this.medicineForSale.id;
+    this.sale.creationDate = this.currentDate= new Date();
+    this.saleService.createSale(this.sale).subscribe(data =>{
+      this.visible = false;
+      this.updateStockMedicine(this.medicineForSale.id, this.sale.stockSale);
+      Swal.fire(
+        'Venta registrada!',
+        'La venta se registro con exito en el sistema',
+        'success'
+      )
+    });
+  }else{
+    this.visible = false;
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'No puedes vender una cantidad por debajo de 1',
+    })
+  }
 
+ }
+ updateTotalValue(){
+     this.sale.totalValue = this.medicineForSale.unitValue * this.sale.stockSale;
+ }
+
+ showDialogSale(){
+  this.visible = true;
+}
+
+updateStockMedicine(id:number, stockSale:number){
+  this.medicineService.updateStockMedicine(id, stockSale).subscribe(data =>{
+     this.getAllMedicines();
+  });
+}
+
+saleSelectedMedicine(id:number){
+  this.medicineService.getMedicineById(id).subscribe(data=>{
+      this.medicineForSale = data;
+  });
+  this.sale.stockSale= 0;
+  this.sale.totalValue = 0;
+  this.showDialogSale();
+
+}
  getAllMedicines(){
    this.medicineService.getAllMedicines().subscribe(dato =>{
         this.medicines = dato;

@@ -4,9 +4,11 @@ import { InventarioNedicinasComponent } from './components/inventario-nedicinas/
 import { CrearMedicinaComponent } from './components/crear-medicina/crear-medicina.component';
 import { ActualizarMedicamentoComponent } from './components/actualizar-medicamento/actualizar-medicamento.component';
 import { InventarioLaboratoriosComponent } from './components/inventario-laboratorios/inventario-laboratorios.component';
+import { InventarioSalesComponent } from './components/inventario-sales/inventario-sales.component';
 
 const routes:Routes = [
     {path: 'inventario-medicinas', component:InventarioNedicinasComponent},
+    {path: 'inventario-ventas', component:InventarioSalesComponent},
     {path: 'inventario-laboratorios', component:InventarioLaboratoriosComponent},
     {path:'actualizar-medicina/:id',component:ActualizarMedicamentoComponent},
     {path: 'crear-medicina', component:CrearMedicinaComponent},
