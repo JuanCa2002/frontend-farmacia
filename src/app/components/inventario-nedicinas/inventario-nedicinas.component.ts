@@ -121,12 +121,6 @@ saleSelectedMedicine(id:number){
 
 }
 
- /*getAllMedicines(){
-  this.medicineService.getAllMedicines().subscribe(dato =>{
-       this.medicines = dato
-   });
-}*/
-
  getAllLaboratories(){
   this.laboratoryService.getAllLaboratories().subscribe(data =>{
     this.laboratories = data;

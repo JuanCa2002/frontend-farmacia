@@ -63,6 +63,12 @@ export class InventarioLaboratoriosComponent {
           'success'
         )
         this.getAllLaboratories();
+      },error =>{
+        Swal.fire({
+          icon: 'info',
+          title: 'No se puede eliminar.',
+          text: 'No se puede borrar este laboratorio porque esta presente como parte de la información de ciertos medicamentos',
+        })
       });
     }
   })
@@ -89,15 +95,24 @@ export class InventarioLaboratoriosComponent {
  }
 
  createLaboratory(){
-  this.laboratoryService.createLaboratory(this.newLaboratory).subscribe(data =>{
+  if(this.newLaboratory.laboratoryName!="" && this.newLaboratory.laboratoryName!=null){
+    this.laboratoryService.createLaboratory(this.newLaboratory).subscribe(data =>{
+      this.visible = false;
+      Swal.fire(
+        'Genial',
+        '¡Se ha creado el laborartorio con exito!',
+        'success'
+      )
+      this.getAllLaboratories();
+      this.newLaboratory= new Laboratory();
+    });
+   }else{
     this.visible = false;
-    Swal.fire(
-      'Genial',
-      '¡Se ha creado el laborartorio con exito!',
-      'success'
-    )
-    this.getAllLaboratories();
-    this.newLaboratory= new Laboratory();
-  });
- }
+    Swal.fire({
+      icon: 'info',
+      title: 'No se puedo crear',
+      text: 'Al parecer tienes campos sin rellenar. Asegurate de llenarlos antes de crear un laboratorio',
+    })
+   }
+  }
 }

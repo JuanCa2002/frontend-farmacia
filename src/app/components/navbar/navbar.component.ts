@@ -15,9 +15,7 @@ export class NavbarComponent {
         this.items = [
             { label: 'Inventario medicinas', icon: 'pi pi-book', routerLink: 'inventario-medicinas'},
             { label: 'Laboratorios', icon: 'pi pi-fw pi-file' , routerLink: 'inventario-laboratorios'},
-            { label: 'Ventas', icon: 'pi pi-cart-plus', routerLink:'inventario-ventas' },
-            { label: 'Documentation', icon: 'pi pi-fw pi-file' },
-            { label: 'Settings', icon: 'pi pi-fw pi-cog' }
+            { label: 'Ventas', icon: 'pi pi-cart-plus', routerLink:'inventario-ventas' }
         ];
 
         this.activeItem = this.items[0];

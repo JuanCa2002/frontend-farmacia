@@ -43,7 +43,8 @@ import { InventarioSalesComponent } from './components/inventario-sales/inventar
     InputTextModule,
     ConfirmDialogModule,
     TabMenuModule,
-    DialogModule,
+    DialogModule
+
     
   ],
   providers: [],

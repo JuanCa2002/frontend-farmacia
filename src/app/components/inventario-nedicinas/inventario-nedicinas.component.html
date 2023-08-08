@@ -47,7 +47,7 @@
 </div>
 <button pButton pRipple label="Crear nuevo" icon="pi pi-plus" class="p-button-success mt-3" (click)="createMedicine()"></button>
 <p-dialog header="Realizar venta {{medicineForSale.name}}" [(visible)]="visible" [style]="{width: '50vw'}">
-    <form (ngSubmit)="makeSale()">
+    <form  (ngSubmit)="makeSale()">
         <div class="mb-3">
             <label for="stock" class="form-label">Cantidad venta: </label>
             <div class="input">

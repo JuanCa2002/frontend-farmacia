@@ -36,22 +36,34 @@ export class ActualizarMedicamentoComponent {
     }
 
     updateMedicine(){
-         if(this.medicine.dueDate == null){
-           this.medicine.dueDate = this.oldMedicine.dueDate;
-         }else if(this.medicine.fabricationDate == null){
-           this.medicine.fabricationDate = this.oldMedicine.fabricationDate;
-         }
-         this.medicine.laboratoryId = this.selectedLaboratory.id;
-         this.medicineService.updateMedicine(this.id, this.medicine).subscribe(dato=>{
+         if(this.verifyData()){
+          this.medicine.laboratoryId = this.selectedLaboratory.id;
+          this.medicineService.updateMedicine(this.id, this.medicine).subscribe(dato=>{
           this.redirectionToForm();
-          Swal.fire(
-            'Genial',
-            '¡Se ha actualizado con exito la medicina!',
-            'success'
-          )
-         });
+           Swal.fire(
+             'Genial',
+             '¡Se ha actualizado con exito la medicina!',
+             'success'
+           )
+          });
+         }else{
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al registrar',
+            text: 'Asegurate de llenar todos los datos antes de realizar el registro',
+          })
+         }
     }
     
+
+    verifyData(){
+      if(this.medicine.name!=""&& this.medicine.fabricationDate!= undefined && this.medicine.dueDate!= undefined && this.medicine.stock!=0 && this.medicine.stock!=null && this.medicine.unitValue!=0 && this.medicine.unitValue!=null){
+         return true;
+      }else{
+        return false;
+      }
+    }
+
     getAllLaboratories(){
       this.laboratoryService.getAllLaboratories().subscribe(data=>{
            this.laboratories = data;

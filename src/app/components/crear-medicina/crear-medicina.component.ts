@@ -15,22 +15,39 @@ export class CrearMedicinaComponent {
     medicine:Medicine = new Medicine();
     laboratories: Laboratory[];
     selectedLaboratory:Laboratory = new Laboratory();
+
  
     constructor(private medicineService:MedicineService, private laboratoryService:LaboratoryService, private router:Router){
     }
 
-    ngOnInit() {this.getAllLaboratories();}
+    ngOnInit() {this.getAllLaboratories(); }
 
     createMedicine(){
-      this.medicine.laboratoryId = this.selectedLaboratory.id;
-      this.medicineService.createMedicine(this.medicine).subscribe(data =>{
-        this.redirectionToForm();
-        Swal.fire(
-          'Genial',
-          '¡Se ha creado el medicamento con exito!',
-          'success'
-        )
-      });
+      if(this.verifyData()){
+        this.medicine.laboratoryId = this.selectedLaboratory.id;
+        this.medicineService.createMedicine(this.medicine).subscribe(data =>{
+          this.redirectionToForm();
+          Swal.fire(
+            'Genial',
+            '¡Se ha creado el medicamento con exito!',
+            'success'
+          )
+        });
+      }else{
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al registrar',
+          text: 'Asegurate de llenar todos los datos antes de realizar el registro',
+        })
+      }
+    }
+
+    verifyData(){
+      if(this.medicine.name!=""&& this.medicine.fabricationDate!= undefined && this.medicine.dueDate!= undefined && this.medicine.stock!=0 && this.medicine.unitValue!=0){
+         return true;
+      }else{
+        return false;
+      }
     }
 
     getAllLaboratories(){
