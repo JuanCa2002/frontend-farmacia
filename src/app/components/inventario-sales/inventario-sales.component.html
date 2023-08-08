@@ -1,8 +1,16 @@
-<h1>Ventas realizadas</h1>
+<h1 class="text-center mb-5 mt-5">Ventas realizadas</h1>
 <div class="container">
+<div class="mb-3">
+    <p-calendar class="filter" name="initial-date" [(ngModel)]="initialDate" [showIcon]="true"></p-calendar>
+    <p-calendar class="filter" name="final-date" [(ngModel)]="finalDate" [showIcon]="true"></p-calendar>
+    <p-button  class="filter" icon="pi pi-filter-fill" (click)="filterByDateRange()" label="Filtrar" styleClass="p-button-raised"></p-button>
+    <div class="button-remove-filter">
+        <p-button *ngIf="removeFilterVisible" icon="pi pi-filter-slash" (click)="removeFilter()" label="Remover filtro" class="remover-filtro-boton"  styleClass="p-button-danger"></p-button>
+    </div>
+</div>   
 <div class="card">
     <p-table [columns]="cols" [paginator]="true" 
-    [rows]="5" [value]="sales" [tableStyle]="{ 'min-width': '50rem' }">
+    [rows]="4" [value]="sales" [tableStyle]="{ 'min-width': '50rem' }">
         <ng-template pTemplate="header" let-columns>
             <tr>
                 <th *ngFor="let col of columns">

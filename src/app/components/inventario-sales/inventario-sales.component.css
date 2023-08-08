@@ -1,0 +1,13 @@
+.filter{
+    margin-left: 10px;
+}
+
+.button-remove-filter{
+    position: relative;
+    top: -50px;         
+    left: 660px; 
+}
+
+.text-center{
+    text-align: center;
+}

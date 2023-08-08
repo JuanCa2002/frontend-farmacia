@@ -24,4 +24,8 @@ export class SaleService{
     public createSale(sale:Sale):Observable<any>{
         return this.httpClient.post(`${this.base_url}`, sale);
     }
+
+    public getSalesByDateRange(dateOne:string, dateTwo:string):Observable<Sale[]>{
+        return this.httpClient.get<Sale[]>(`${this.base_url}/dates/${dateOne}/${dateTwo}`);
+    }
 }
