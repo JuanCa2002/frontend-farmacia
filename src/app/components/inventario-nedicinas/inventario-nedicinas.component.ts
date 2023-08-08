@@ -1,7 +1,9 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { forkJoin, map } from 'rxjs';
 import { Laboratory } from 'src/app/models/Laboratory';
 import { Column } from 'src/app/models/column';
+import { FilterOption } from 'src/app/models/filterOption';
 
 import { Medicine } from 'src/app/models/medicine';
 import { Sale } from 'src/app/models/sale';
@@ -18,12 +20,23 @@ import Swal from 'sweetalert2';
 
 export class InventarioNedicinasComponent {
   //Table varibles
-  medicines: Medicine[];
+  medicines: Medicine[] = [];
+  medicinesFilter: Medicine[] = [];
+  medicinesByName:Medicine[] = [];
+  idFilter:number=0;
+  filter:boolean= false;
+  filterName:boolean = false;
+  laboratory: Laboratory = new Laboratory();
+  removeFilterVisible: boolean = false; 
+  nameFilter:string ="";
+  medicineById: Medicine = new Medicine();
+  filterOptions:FilterOption[];
+  filterOptionSelected: FilterOption = new FilterOption();
   currentDate: Date = new Date();
   medicineForSale: Medicine = new Medicine();
   sale: Sale = new Sale();
   visible:boolean = false;
-  laboratory: Laboratory = new Laboratory();
+  selectedLaboratory: Laboratory = new Laboratory();
   laboratories: Laboratory[] = [];
   cols!: Column[];
   
@@ -32,11 +45,14 @@ export class InventarioNedicinasComponent {
      private laboratoryService: LaboratoryService, private saleService:SaleService){}
 
   ngOnInit() {
+     this.getAllLaboratories();
+     this.loadFilterOptions();
      this.getAllMedicines();
+     console.log(this.medicines);
      this.cols = [
         { field: 'id', header: 'Id' },
         { field: 'name', header: 'Nombre' },
-        { field: 'laboratoryId', header: 'Laboratorio fabricante'},
+        { field: 'nameLaboratory', header: 'Laboratorio fabricante'},
         { field: 'fabricationDate', header: 'Fecha de fabricación'},
         { field: 'dueDate', header: 'Fecha de expiración'},
         { field: 'stock', header: 'Cantidad' },
@@ -45,6 +61,16 @@ export class InventarioNedicinasComponent {
         { field: 'editar',header:'Acciones'},
         { field: 'vender',header:''},
     ];
+ }
+
+ loadFilterOptions(){
+  this.filterOptionSelected.option = 'name';
+  this.filterOptionSelected.title = 'Filtrar por nombre';
+  this.filterOptions = [
+    {option: 'name', title: 'Filtrar por nombre'},
+    {option: 'laboratory', title: 'Filtrar por laboratorio'},
+    {option: 'id', title: 'Filtrar por identificador'}
+  ]
  }
  
  makeSale(){
@@ -94,32 +120,138 @@ saleSelectedMedicine(id:number){
   this.showDialogSale();
 
 }
- getAllMedicines(){
-   this.medicineService.getAllMedicines().subscribe(dato =>{
-        this.medicines = dato;
-    });
- }
+
+ /*getAllMedicines(){
+  this.medicineService.getAllMedicines().subscribe(dato =>{
+       this.medicines = dato
+   });
+}*/
 
  getAllLaboratories(){
   this.laboratoryService.getAllLaboratories().subscribe(data =>{
     this.laboratories = data;
   });
  }
-
+ 
  getLaboratoryById(id:number){
   this.laboratoryService.getLaboratoryById(id).subscribe(data =>{
-    this.laboratory = data;
-    return this.laboratory.laboratoryName;
+        return data;
   });
  }
 
- createMedicine(){
+ getAllMedicines() {
+  this.medicineService.getAllMedicines().subscribe(data => {
+    const medicineObservables = data.map(medicine => {
+      return this.laboratoryService.getLaboratoryById(medicine.laboratoryId).pipe(
+        map(labData => {
+          medicine.nameLaboratory = labData.laboratoryName;
+          return medicine;
+        })
+      );
+    });
+
+    forkJoin(medicineObservables).subscribe(updatedMedicines => {
+      this.medicines = updatedMedicines;
+    });
+  });
+}
+
+createMedicine(){
   this.router.navigate(['crear-medicina']);
  }
 
  updateMedicine(id:number){
   this.router.navigate(['actualizar-medicina',id]);
  }
+
+ filterById(id:number){
+  this.filter = true;
+  this.filterName = false;
+  this.removeFilterVisible = true;
+  this.medicinesFilter = [];
+   this.medicineService.getMedicineById(id).subscribe(data=>{
+         this.medicineById = data;
+         this.medicinesFilter[0] = this.medicineById;
+         const medicineObservables = this.medicinesFilter.map(medicine => {
+          return this.laboratoryService.getLaboratoryById(medicine.laboratoryId).pipe(
+            map(labData => {
+              medicine.nameLaboratory = labData.laboratoryName;
+              return medicine;
+            })
+          );
+        });
+    
+        forkJoin(medicineObservables).subscribe(updatedMedicines => {
+          this.medicinesFilter = updatedMedicines;
+        }); 
+   },error => {
+    Swal.fire({
+      icon: 'info',
+      title: 'Oops...',
+      text: 'No se encontraron resultados con ese id',
+    })
+   });
+   this.idFilter = 0;
+ }
+
+ filterByLaboratory(id:number){
+  this.filter = true;
+  this.filterName = false;
+   this.removeFilterVisible = true;
+   this.medicineService.getMedicinesByLaboratory(id).subscribe(data=>{
+    const medicineObservables = data.map(medicine => {
+      return this.laboratoryService.getLaboratoryById(medicine.laboratoryId).pipe(
+        map(labData => {
+          medicine.nameLaboratory = labData.laboratoryName;
+          return medicine;
+        })
+      );
+    });
+
+    forkJoin(medicineObservables).subscribe(updatedMedicines => {
+      this.medicinesFilter = updatedMedicines;
+    }); 
+   },error => {
+    Swal.fire({
+      icon: 'info',
+      title: 'Oops...',
+      text: 'Ha ocurrido un error',
+    })
+   });
+ }
+
+ filterByName(name:string){
+  this.filter = false;
+  this.filterName = true;
+  this.removeFilterVisible = true;
+  this.medicinesByName = this.medicineService.getMedicineByName(name, this.medicines);
+  console.log(this.medicinesByName);
+  if(this.medicinesByName.length==0){
+    Swal.fire({
+      icon: 'info',
+      title: 'Oops...',
+      text: 'No se han encontrado medicamentos con ese termino',
+    })
+  }
+  this.nameFilter = "";
+}
+
+determineValue(){
+  if(!this.filter && !this.filterName){
+     return this.medicines;
+  }else if(this.filter){
+    return this.medicinesFilter;
+  }else{
+    return this.medicinesByName;
+  }
+}
+
+removeFilter(){
+  this.getAllMedicines();
+  this.filterName = false;
+  this.filter = false;
+  this.removeFilterVisible = false;
+}
 
  deleteMedicine(id:number){
   Swal.fire({

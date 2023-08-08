@@ -20,6 +20,10 @@ export class MedicineService{
         return this.httpClient.get<Medicine>(`${this.base_url}/${id}`);
     }
 
+    public getMedicinesByLaboratory(laboratoryId:number):Observable<Medicine[]>{
+        return this.httpClient.get<Medicine[]>(`${this.base_url}/laboratory/${laboratoryId}`);
+    }
+
     public createMedicine(medicine:Medicine):Observable<any>{
         return this.httpClient.post(`${this.base_url}`,medicine);
     }
@@ -38,6 +42,18 @@ export class MedicineService{
         amountStockLess.append("stock", stockSale);
         return this.httpClient.put(`${this.base_url}/stock/${id}`, amountStockLess);
     }
+
+    getMedicineByName(term:string,medicines:Medicine[]):Medicine[]{
+        let foundMedicines: Medicine[]=[]
+        term= term.toLowerCase();
+        for(let medicine of medicines){
+          let name=medicine.name.toLowerCase();
+          if(name.indexOf(term)>=0){
+            foundMedicines.push(medicine);
+          }
+        }
+        return foundMedicines;
+      }
 
 
 }

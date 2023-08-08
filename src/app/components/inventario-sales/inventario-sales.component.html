@@ -13,7 +13,8 @@
         <ng-template pTemplate="body" let-rowData let-columns="columns">
             <tr>
                 <td *ngFor="let col of columns">
-                    {{ rowData[col.field] }}
+                    <p *ngIf="col.field=='creationDate'">{{ rowData[col.field] |date:'dd/MM/YYYY hh:mm a' }}</p>
+                    <p *ngIf="col.field!='creationDate'">{{ rowData[col.field]}}</p>
                 </td>
             </tr>
         </ng-template>

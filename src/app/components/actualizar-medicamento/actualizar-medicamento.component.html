@@ -11,13 +11,13 @@
         <div class="mb-3">
           <label for="fabrication-date" class="form-label">Fecha de fabricación: </label>
           <div class="input">
-            <p-calendar placeholder="{{medicine.fabricationDate|date:'MM/dd/YYYY'}}" name="fabrication-date"  [showIcon]="true" [(ngModel)]="medicine.fabricationDate"></p-calendar>
+            <p-calendar placeholder="{{medicine.fabricationDate|date:'dd/MM/YYYY'}}" name="fabrication-date"  [showIcon]="true" [(ngModel)]="medicine.fabricationDate"></p-calendar>
           </div>
         </div>
         <div class="mb-3">
             <label for="expiration-date" class="form-label">Fecha de expiración: </label>
             <div class="input">
-                <p-calendar placeholder="{{medicine.dueDate|date:'MM/dd/YYYY'}}" name="expiration-date" [(ngModel)]="medicine.dueDate" [showIcon]="true"></p-calendar>
+                <p-calendar placeholder="{{medicine.dueDate|date:'dd/MM/YYYY'}}" name="expiration-date" [(ngModel)]="medicine.dueDate" [showIcon]="true"></p-calendar>
             </div>
         </div>
         <div class="mb-3">

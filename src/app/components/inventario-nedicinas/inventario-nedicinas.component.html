@@ -1,8 +1,30 @@
-<h1 class="text-center mb-5">Medicinas registradas</h1>
+<h1 class="text-center mt-3 mb-5">Medicinas registradas</h1>
 <div class="container">
+<div class="filtro" *ngIf="filterOptionSelected.option== 'name'">
+    <input type="text" pInputText [(ngModel)]="nameFilter"  />   
+</div>
+<div class="filtro" *ngIf="filterOptionSelected.option== 'laboratory'">
+   <p-dropdown [options]="laboratories" name="laboratory" [(ngModel)]="selectedLaboratory" optionLabel="laboratoryName"></p-dropdown>
+</div>
+<div class="filtro" *ngIf="filterOptionSelected.option== 'id'">
+    <p-inputNumber [(ngModel)]="idFilter" inputId="integeronly" ></p-inputNumber>   
+</div>
+<div class="input mb-3">
+   <p-dropdown [options]="filterOptions" [(ngModel)]="filterOptionSelected" placeholder="Selecciona un filtro" [editable]="true" optionLabel="title"></p-dropdown>
+</div>
+<ng-template [ngIf]="filterOptionSelected.option == 'id'">
+    <p-button icon="pi pi-filter-fill" (click)="filterById(idFilter)" class="filtro-button" label="Filtrar"></p-button>
+</ng-template>
+<ng-template [ngIf]="filterOptionSelected.option == 'laboratory'">
+    <p-button icon="pi pi-filter-fill" (click)="filterByLaboratory(selectedLaboratory.id)" class="filtro-button" label="Filtrar"></p-button>
+</ng-template>
+<ng-template [ngIf]="filterOptionSelected.option == 'name'">
+    <p-button icon="pi pi-filter-fill" (click)="filterByName(nameFilter)" class="filtro-button" label="Filtrar"></p-button>
+</ng-template>
+<p-button *ngIf="removeFilterVisible" icon="pi pi-filter-slash" (click)="removeFilter()" label="Remover filtro" class="remover-filtro-boton"  styleClass="p-button-danger"></p-button>
 <div class="card">
     <p-table [columns]="cols" [paginator]="true" 
-    [rows]="2"  [value]="medicines" [tableStyle]="{ 'min-width': '50rem' }">
+    [rows]="2" [value]="determineValue()" [tableStyle]="{ 'min-width': '50rem' }">
         <ng-template pTemplate="header" let-columns>
             <tr>
                 <th *ngFor="let col of columns">
@@ -13,7 +35,7 @@
         <ng-template pTemplate="body" let-rowData let-columns="columns">
             <tr>
                 <td *ngFor="let col of columns">
-                    <p *ngIf="col.field=='dueDate'|| col.field=='fabricationDate'">{{ rowData[col.field]| date:'yyyy-MM-dd' }}</p>
+                    <p *ngIf="col.field=='dueDate'|| col.field=='fabricationDate'">{{ rowData[col.field] |date:'dd/MM/YYYY' }}</p>
                     <p *ngIf="col.field!='dueDate' && col.field!='fabricationDate'">{{ rowData[col.field]}}</p>
                     <p-button *ngIf="col.field=='eliminar'" label="Eliminar" icon="pi pi-trash" (click)="deleteMedicine(rowData['id'])" styleClass="p-button-danger"></p-button>
                     <p-button *ngIf="col.field=='editar'"label="Editar" icon="pi pi-pencil" (click)="updateMedicine(rowData['id'])" styleClass="p-button-info"></p-button>

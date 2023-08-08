@@ -1,3 +1,21 @@
 .text-center{
     text-align: center;
 }
+
+.filtro{
+    position: relative;
+    top: 50px;         
+    left: 270px;  
+}
+
+.filtro-button{
+    position: relative;
+    top: -65px;         
+    left: 490px; 
+}
+
+.remover-filtro-boton{
+    position: relative;
+    top: -65px;         
+    left: 500px; 
+}

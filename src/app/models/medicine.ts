@@ -5,5 +5,6 @@ export class Medicine{
     dueDate:Date;
     stock:number;
     unitValue:number;
+    nameLaboratory:string;
     laboratoryId: number;
 }

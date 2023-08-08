@@ -4,5 +4,6 @@ export class Sale{
     stockSale:number;
     unitValue:number;
     totalValue:number;
+    medicineName:string;
     medicineId:number;
 }
