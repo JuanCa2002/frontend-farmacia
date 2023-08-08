@@ -24,7 +24,7 @@
 <p-button *ngIf="removeFilterVisible" icon="pi pi-filter-slash" (click)="removeFilter()" label="Remover filtro" class="remover-filtro-boton"  styleClass="p-button-danger"></p-button>
 <div class="card">
     <p-table [columns]="cols" [paginator]="true" 
-    [rows]="2" [value]="determineValue()" [tableStyle]="{ 'min-width': '50rem' }">
+    [rows]="3" [value]="determineValue()" [tableStyle]="{ 'min-width': '50rem' }">
         <ng-template pTemplate="header" let-columns>
             <tr>
                 <th *ngFor="let col of columns">
