@@ -37,15 +37,24 @@ export class ActualizarMedicamentoComponent {
 
     updateMedicine(){
          if(this.verifyData()){
-          this.medicine.laboratoryId = this.selectedLaboratory.id;
-          this.medicineService.updateMedicine(this.id, this.medicine).subscribe(dato=>{
-          this.redirectionToForm();
-           Swal.fire(
-             'Genial',
-             '¡Se ha actualizado con exito la medicina!',
-             'success'
-           )
-          });
+          if(this.medicine.fabricationDate >= this.medicine.dueDate!){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error al registrar',
+              text: 'La fecha de fabricación no puede ser mayor o igual a la expiracion',
+            })
+            
+          }else{
+            this.medicine.laboratoryId = this.selectedLaboratory.id;
+            this.medicineService.updateMedicine(this.id, this.medicine).subscribe(dato=>{
+            this.redirectionToForm();
+             Swal.fire(
+               'Genial',
+               '¡Se ha actualizado con exito la medicina!',
+               'success'
+             )
+            });
+          }
          }else{
           Swal.fire({
             icon: 'error',

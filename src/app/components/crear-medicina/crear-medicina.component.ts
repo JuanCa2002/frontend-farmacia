@@ -24,15 +24,23 @@ export class CrearMedicinaComponent {
 
     createMedicine(){
       if(this.verifyData()){
-        this.medicine.laboratoryId = this.selectedLaboratory.id;
-        this.medicineService.createMedicine(this.medicine).subscribe(data =>{
-          this.redirectionToForm();
-          Swal.fire(
-            'Genial',
-            '¡Se ha creado el medicamento con exito!',
-            'success'
-          )
-        });
+        if(this.medicine.fabricationDate >= this.medicine.dueDate!){
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al registrar',
+            text: 'La fecha de fabricación no puede ser mayor o igual a la expiracion',
+          })
+        }else{
+          this.medicine.laboratoryId = this.selectedLaboratory.id;
+          this.medicineService.createMedicine(this.medicine).subscribe(data =>{
+            this.redirectionToForm();
+            Swal.fire(
+              'Genial',
+              '¡Se ha creado el medicamento con exito!',
+              'success'
+            )
+          });
+        }
       }else{
         Swal.fire({
           icon: 'error',
